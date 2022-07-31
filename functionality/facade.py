@@ -47,19 +47,13 @@ class Manager:
     def output_factory(self, output_key: str) -> Union[IOReader, FileHandler]:
         return self.output.get(output_key)()
 
-    def rot_13_keyboard_screen(self) -> None:
-        """Execute actions for ROT13 - keyboard - screen case"""
-        cipher: ROT13 = self.cipher_factory("ROT13")
-        input_: IOReader = self.input_factory("keyboard")
-        output_: IOReader = self.output_factory("screen")
-        output_.io_write(cipher.encode(input_.io_read()))
+    def execute_case(self, cipher_: str, input_: str, output_: str):
+        """Execute actions basing on passed arguments(case): cipher, input and output type"""
+        cipher_: ROT13 = self.cipher_factory(cipher_)
+        input_: Union[IOReader, FileHandler] = self.input_factory(input_)
+        output_: Union[IOReader, FileHandler] = self.output_factory(output_)
 
-    def rot_13_keyboard_file(self) -> None:
-        """Execute actions for ROT13 - keyboard - file"""
-        cipher: ROT13 = self.cipher_factory("ROT13")
-        input_: IOReader = self.input_factory("keyboard")
-        output_: FileHandler = self.output_factory("file")
-        output_.write_file(cipher.encode(input_.io_read()))
+        output_.write(cipher_.encode(input_.read()))
 
     def user_request_handler(self):
         """Perform action depending on user input"""
@@ -76,10 +70,10 @@ class Manager:
         match (main_menu_choice, input_menu_choice, output_menu_choice):
             case (1, 1, 1):
                 print("ROT13 -> Keyboard -> Screen")
-                self.rot_13_keyboard_screen()
+                self.execute_case("ROT13", "keyboard", "screen")
             case (1, 1, 2):
                 print("ROT13 -> Keyboard -> File")
-                self.rot_13_keyboard_file()
+                self.execute_case("ROT13", "keyboard", "file")
 
             case (1, 2, 1):
                 print("Rot13 -> File -> Screen")
