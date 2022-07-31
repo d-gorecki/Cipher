@@ -48,11 +48,18 @@ class Manager:
         return self.output.get(output_key)()
 
     def rot_13_keyboard_screen(self) -> None:
-        """Execute actions for ROT13_keyboard_screen case"""
+        """Execute actions for ROT13 - keyboard - screen case"""
         cipher: ROT13 = self.cipher_factory("ROT13")
         input_: IOReader = self.input_factory("keyboard")
         output_: IOReader = self.output_factory("screen")
         output_.io_write(cipher.encode(input_.io_read()))
+
+    def rot_13_keyboard_file(self) -> None:
+        """Execute actions for ROT13 - keyboard - file"""
+        cipher: ROT13 = self.cipher_factory("ROT13")
+        input_: IOReader = self.input_factory("keyboard")
+        output_: FileHandler = self.output_factory("file")
+        output_.write_file(cipher.encode(input_.io_read()))
 
     def user_request_handler(self):
         """Perform action depending on user input"""
@@ -70,13 +77,9 @@ class Manager:
             case (1, 1, 1):
                 print("ROT13 -> Keyboard -> Screen")
                 self.rot_13_keyboard_screen()
-            case (1, 2, 1):
+            case (1, 1, 2):
                 print("ROT13 -> Keyboard -> File")
-                case_cipher = self.cipher_factory("ROT13")
-                case_output = self.output_factory("file")
-                user_input = input("Enter text to encode>>> ")
-                case_output.get_file_path()
-                case_output.write_file(case_cipher.encode(user_input))
+                self.rot_13_keyboard_file()
 
             case (1, 2, 1):
                 print("Rot13 -> File -> Screen")
