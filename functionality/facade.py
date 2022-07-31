@@ -7,6 +7,8 @@ from typing import Union
 class Manager:
     """Manager class implementing facade structural pattern"""
 
+    MENU_PROMPT: str = "Entered value must be in range 1-3"
+
     app_name: str = "Cipher app."
 
     main_menu: str = (
@@ -37,6 +39,7 @@ class Manager:
         self.cipher = {"ROT13": ROT13, "ROT47": "ROT47"}
         self.input = {"keyboard": IOReader, "file": FileHandler}
         self.output = {"screen": IOReader, "file": FileHandler}
+        self.running = True
 
     def cipher_factory(self, cipher_key: str) -> ROT13:
         return self.cipher.get(cipher_key)()
@@ -62,45 +65,78 @@ class Manager:
 
         output_.write(cipher_.encode(input_.read()))
 
+    def print_menu(self) -> Union[None, tuple]:
+        """Prints user menu and returns given choice in form of tuple"""
+        print(Manager.app_name)
+
+        while True:
+
+            main_menu_choice: int = int(input(Manager.main_menu))
+            while main_menu_choice not in [1, 2, 3]:
+                print(Manager.MENU_PROMPT)
+                main_menu_choice = int(input(Manager.main_menu))
+
+            if main_menu_choice == 3:
+                print("Closing app...")
+                return -1, -1, -1
+
+            input_menu_choice: int = int(input(Manager.input_menu))
+            while input_menu_choice not in [1, 2, 3]:
+                print(Manager.MENU_PROMPT)
+                input_menu_choice = int(input(Manager.input_menu))
+
+            if input_menu_choice == 3:
+                continue
+
+            output_menu_choice: int = int(input(Manager.output_menu))
+            while output_menu_choice not in [1, 2, 3]:
+                print(Manager.MENU_PROMPT)
+                output_menu_choice = int(input(Manager.input_menu))
+
+            if output_menu_choice == 3:
+                continue
+
+            return main_menu_choice, input_menu_choice, output_menu_choice
+
     def user_request_handler(self):
         """Perform action depending on user input"""
-        print(Manager.app_name)
-        main_menu_choice: int = int(input(Manager.main_menu))
-        if main_menu_choice in [1, 2]:
-            input_menu_choice = int(input(Manager.input_menu))
-            if input_menu_choice in [1, 2]:
-                output_menu_choice = int(input(Manager.output_menu))
-        else:
-            print("Closing app...")
-            return
+
+        main_menu_choice, input_menu_choice, output_menu_choice = self.print_menu()
 
         match (main_menu_choice, input_menu_choice, output_menu_choice):
+            case (-1, -1, -1):
+                return False
             case (1, 1, 1):
                 print("ROT13 -> Keyboard -> Screen")
                 self.execute_case("ROT13", "keyboard", "screen")
+                return True
             case (1, 1, 2):
                 print("ROT13 -> Keyboard -> File")
                 self.execute_case("ROT13", "keyboard", "file")
-            case (1, 1, 3):
-                print("Return to main menu")
-            case (1, 2, 1):
-                print("ROT13 -> file -> screen")
-                self.execute_case("ROT13", "file", "screen")
-            case (1, 2, 2):
-                print("ROT13 -> file -> file")
-                self.execute_case("ROT13", "file", "file")
-            case (1, 2, 3):
-                print("Return to main menu")
-
+                return True
             case (1, 2, 1):
                 print("Rot13 -> File -> Screen")
-
+                self.execute_case("ROT13", "file", "screen")
             case (1, 2, 2):
                 print("Rot13 -> File -> File")
-
+                self.execute_case("ROT13", "file", "file")
             case _:
                 print("Something went wrong...")
 
 
-ex = Manager()
-ex.user_request_handler()
+def main():
+    """Main function"""
+    manager = Manager()
+    running: bool = True
+
+    while running:
+        if manager.user_request_handler():
+            continue_ = input("Continue? [y/n]")
+            if continue_ == "n":
+                running = False
+        else:
+            running = False
+
+
+if __name__ == "__main__":
+    main()
