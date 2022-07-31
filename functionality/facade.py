@@ -53,8 +53,15 @@ class Manager:
     def execute_case(self, cipher_: str, input_: str, output_: str):
         """Execute actions basing on passed arguments(case): cipher, input and output type"""
         cipher_: ROT13 = self.cipher_factory(cipher_)
-        input_: Union[IOReader, FileHandler] = self.input_factory(input_)
-        output_: Union[IOReader, FileHandler] = self.output_factory(output_)
+
+        if input_ == "file" and output_ == "file":
+            print("# INPUT FILE")
+            input_: Union[IOReader, FileHandler] = self.input_factory(input_)
+            print("# OUTPUT FILE")
+            output_: Union[IOReader, FileHandler] = self.output_factory(output_)
+        else:
+            input_: Union[IOReader, FileHandler] = self.input_factory(input_)
+            output_: Union[IOReader, FileHandler] = self.output_factory(output_)
 
         output_.write(cipher_.encode(input_.read()))
 
