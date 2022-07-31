@@ -117,9 +117,11 @@ class Manager:
             case (1, 2, 1):
                 print("Rot13 -> File -> Screen")
                 self.execute_case("ROT13", "file", "screen")
+                return True
             case (1, 2, 2):
                 print("Rot13 -> File -> File")
                 self.execute_case("ROT13", "file", "file")
+                return True
             case _:
                 print("Something went wrong...")
 
