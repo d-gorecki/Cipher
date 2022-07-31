@@ -1,5 +1,7 @@
 from functionality.filehandler import FileHandler
 from functionality.cipher import ROT13
+from functionality.ioreader import IOReader
+from typing import Union
 
 
 class Manager:
@@ -33,13 +35,24 @@ class Manager:
 
     def __init__(self):
         self.cipher = {"ROT13": ROT13, "ROT47": "ROT47"}
-        self.input = {"keyboard": "IOReader", "file": FileHandler}
+        self.input = {"keyboard": IOReader, "file": FileHandler}
+        self.output = {"screen": IOReader, "file": FileHandler}
 
     def cipher_factory(self, cipher_key: str) -> ROT13:
         return self.cipher.get(cipher_key)()
 
-    def input_factory(self, input_key: str) -> FileHandler:
+    def input_factory(self, input_key: str) -> Union[IOReader, FileHandler]:
         return self.input.get(input_key)()
+
+    def output_factory(self, output_key: str) -> Union[IOReader, FileHandler]:
+        return self.output.get(output_key)()
+
+    def rot_13_keyboard_screen(self) -> None:
+        """Execute actions for ROT13_keyboard_screen case"""
+        cipher: ROT13 = self.cipher_factory("ROT13")
+        input_: IOReader = self.input_factory("keyboard")
+        output_: IOReader = self.output_factory("screen")
+        output_.io_write(cipher.encode(input_.io_read()))
 
     def user_request_handler(self):
         """Perform action depending on user input"""
@@ -56,11 +69,11 @@ class Manager:
         match (main_menu_choice, input_menu_choice, output_menu_choice):
             case (1, 1, 1):
                 print("ROT13 -> Keyboard -> Screen")
-
+                self.rot_13_keyboard_screen()
             case (1, 2, 1):
                 print("ROT13 -> Keyboard -> File")
                 case_cipher = self.cipher_factory("ROT13")
-                case_output = self.input_factory("file")
+                case_output = self.output_factory("file")
                 user_input = input("Enter text to encode>>> ")
                 case_output.get_file_path()
                 case_output.write_file(case_cipher.encode(user_input))
