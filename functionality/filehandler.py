@@ -3,6 +3,7 @@ class FileHandler:
 
     def __init__(self):
         self.file_path = ""
+        self.get_file_path()
 
     def get_file_path(self) -> None:
         """Get file name(path) from user"""
