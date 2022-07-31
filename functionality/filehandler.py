@@ -1,8 +1,12 @@
 class FileHandler:
     """File handler class"""
 
-    def __init__(self, file_path: str):
-        self.file_path = file_path
+    def __init__(self):
+        self.file_path = ""
+
+    def get_file_path(self) -> None:
+        """Get file name(path) from user"""
+        self.file_path: str = input("Please enter file name(path): ")
 
     def read_file(self) -> str:
         """Read data from file and return it in form of str"""
