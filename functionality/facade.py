@@ -50,8 +50,15 @@ class Manager:
     def execute_case(self, cipher_: str, input_: str, output_: str):
         """Execute actions basing on passed arguments(case): cipher, input and output type"""
         cipher_: ROT13 = self.cipher_factory(cipher_)
-        input_: Union[IOReader, FileHandler] = self.input_factory(input_)
-        output_: Union[IOReader, FileHandler] = self.output_factory(output_)
+
+        if input_ == "file" and output_ == "file":
+            print("# INPUT FILE")
+            input_: Union[IOReader, FileHandler] = self.input_factory(input_)
+            print("# OUTPUT FILE")
+            output_: Union[IOReader, FileHandler] = self.output_factory(output_)
+        else:
+            input_: Union[IOReader, FileHandler] = self.input_factory(input_)
+            output_: Union[IOReader, FileHandler] = self.output_factory(output_)
 
         output_.write(cipher_.encode(input_.read()))
 
@@ -74,6 +81,16 @@ class Manager:
             case (1, 1, 2):
                 print("ROT13 -> Keyboard -> File")
                 self.execute_case("ROT13", "keyboard", "file")
+            case (1, 1, 3):
+                print("Return to main menu")
+            case (1, 2, 1):
+                print("ROT13 -> file -> screen")
+                self.execute_case("ROT13", "file", "screen")
+            case (1, 2, 2):
+                print("ROT13 -> file -> file")
+                self.execute_case("ROT13", "file", "file")
+            case (1, 2, 3):
+                print("Return to main menu")
 
             case (1, 2, 1):
                 print("Rot13 -> File -> Screen")
