@@ -40,6 +40,10 @@ class Manager:
         self.input = {"keyboard": IOReader, "file": FileHandler}
         self.output = {"screen": IOReader, "file": FileHandler}
         self.running = True
+        self.exit = False
+
+    def end_app(self):
+        self.running = False
 
     def cipher_factory(self, cipher_key: str) -> ROT13:
         return self.cipher.get(cipher_key)()
@@ -63,7 +67,7 @@ class Manager:
             input_: Union[IOReader, FileHandler] = self.input_factory(input_)
             output_: Union[IOReader, FileHandler] = self.output_factory(output_)
 
-        output_.write(cipher_.encode(input_.read()))
+        output_.write(cipher_.encode_decode(input_.read()), cipher_.cipher_type)
 
     def print_menu(self) -> Union[None, tuple]:
         """Prints user menu and returns given choice in form of tuple"""
@@ -78,6 +82,7 @@ class Manager:
 
             if main_menu_choice == 3:
                 print("Closing app...")
+                self.running = False
                 return -1, -1, -1
 
             input_menu_choice: int = int(input(Manager.input_menu))
@@ -105,40 +110,18 @@ class Manager:
 
         match (main_menu_choice, input_menu_choice, output_menu_choice):
             case (-1, -1, -1):
-                return False
+                return True
             case (1, 1, 1):
                 print("ROT13 -> Keyboard -> Screen")
                 self.execute_case("ROT13", "keyboard", "screen")
-                return True
             case (1, 1, 2):
                 print("ROT13 -> Keyboard -> File")
                 self.execute_case("ROT13", "keyboard", "file")
-                return True
             case (1, 2, 1):
                 print("Rot13 -> File -> Screen")
                 self.execute_case("ROT13", "file", "screen")
-                return True
             case (1, 2, 2):
                 print("Rot13 -> File -> File")
                 self.execute_case("ROT13", "file", "file")
-                return True
             case _:
                 print("Something went wrong...")
-
-
-def main():
-    """Main function"""
-    manager = Manager()
-    running: bool = True
-
-    while running:
-        if manager.user_request_handler():
-            continue_ = input("Continue? [y/n]")
-            if continue_ == "n":
-                running = False
-        else:
-            running = False
-
-
-if __name__ == "__main__":
-    main()

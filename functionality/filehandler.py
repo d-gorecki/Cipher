@@ -16,8 +16,8 @@ class FileHandler:
 
         return output
 
-    def write(self, text: str) -> None:
+    def write(self, text: str, cipher_type: str) -> None:
         """Write passed data to file. Append data in case file does exist.
         Create new file in case passed file does not exist."""
         with open(self.file_path, mode="a") as f:
-            f.writelines(text)
+            f.writelines(str({cipher_type: text}))
