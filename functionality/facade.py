@@ -2,6 +2,11 @@ from functionality.filehandler import FileHandler
 from functionality.cipher import ROT13, ROT47
 from functionality.ioreader import IOReader
 from typing import Union
+from os.path import exists
+import logging
+import time
+
+logging.basicConfig(level=logging.INFO, format="")
 
 
 class Manager:
@@ -60,9 +65,13 @@ class Manager:
 
         if input_ == "file" and output_ == "file":
             print("# INPUT FILE")
-            input_: Union[IOReader, FileHandler] = self.input_factory(input_)
+            input_: FileHandler = self.input_factory(input_)
+            if not exists(input_.file_path):
+                raise FileNotFoundError(
+                    "No such file or directory!\nReturning to main menu..."
+                )
             print("# OUTPUT FILE")
-            output_: Union[IOReader, FileHandler] = self.output_factory(output_)
+            output_: FileHandler = self.output_factory(output_)
         else:
             input_: Union[IOReader, FileHandler] = self.input_factory(input_)
             output_: Union[IOReader, FileHandler] = self.output_factory(output_)
@@ -74,31 +83,36 @@ class Manager:
         print(Manager.app_name)
 
         while True:
+            try:
+                main_menu_choice: int = int(input(Manager.main_menu))
 
-            main_menu_choice: int = int(input(Manager.main_menu))
-            while main_menu_choice not in [1, 2, 3]:
-                print(Manager.MENU_PROMPT)
-                main_menu_choice = int(input(Manager.main_menu))
+                while main_menu_choice not in [1, 2, 3]:
+                    print(Manager.MENU_PROMPT)
+                    main_menu_choice = int(input(Manager.main_menu))
 
-            if main_menu_choice == 3:
-                print("Closing app...")
-                self.running = False
-                return -1, -1, -1
+                if main_menu_choice == 3:
+                    print("Closing app...")
+                    self.running = False
+                    return -1, -1, -1
 
-            input_menu_choice: int = int(input(Manager.input_menu))
-            while input_menu_choice not in [1, 2, 3]:
-                print(Manager.MENU_PROMPT)
-                input_menu_choice = int(input(Manager.input_menu))
+                input_menu_choice: int = int(input(Manager.input_menu))
+                while input_menu_choice not in [1, 2, 3]:
+                    print(Manager.MENU_PROMPT)
+                    input_menu_choice = int(input(Manager.input_menu))
 
-            if input_menu_choice == 3:
-                continue
+                if input_menu_choice == 3:
+                    continue
 
-            output_menu_choice: int = int(input(Manager.output_menu))
-            while output_menu_choice not in [1, 2, 3]:
-                print(Manager.MENU_PROMPT)
-                output_menu_choice = int(input(Manager.input_menu))
+                output_menu_choice: int = int(input(Manager.output_menu))
+                while output_menu_choice not in [1, 2, 3]:
+                    print(Manager.MENU_PROMPT)
+                    output_menu_choice = int(input(Manager.input_menu))
 
-            if output_menu_choice == 3:
+                if output_menu_choice == 3:
+                    continue
+
+            except ValueError:
+                logging.info("Input must correspond to given options (1-3)!")
                 continue
 
             return main_menu_choice, input_menu_choice, output_menu_choice
