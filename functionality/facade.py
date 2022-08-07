@@ -40,6 +40,7 @@ class Manager:
         self.input = {"keyboard": IOReader, "file": FileHandler}
         self.output = {"screen": IOReader, "file": FileHandler}
         self.running = True
+        self.exit = False
 
     def end_app(self):
         self.running = False
@@ -66,7 +67,7 @@ class Manager:
             input_: Union[IOReader, FileHandler] = self.input_factory(input_)
             output_: Union[IOReader, FileHandler] = self.output_factory(output_)
 
-        output_.write(cipher_.encode_decode(input_.read()))
+        output_.write(cipher_.encode_decode(input_.read()), cipher_.cipher_type)
 
     def print_menu(self) -> Union[None, tuple]:
         """Prints user menu and returns given choice in form of tuple"""

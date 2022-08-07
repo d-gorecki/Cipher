@@ -7,11 +7,10 @@ logging.basicConfig(level=logging.INFO, format="")
 def main():
     """Main function"""
     manager = Manager()
-    manager_exit: bool
 
     while manager.running:
-        manager_exit = manager.user_request_handler()
-        if manager_exit:
+        manager.exit = manager.user_request_handler()
+        if manager.exit:
             break
         continue_: str = input("Continue?(y/n):\n>>> ")
         if continue_ == "n":

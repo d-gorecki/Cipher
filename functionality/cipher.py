@@ -16,6 +16,9 @@ class Cipher(ABC):
 class ROT13(Cipher):
     """ROT13 class implementing ROT13 algorithm."""
 
+    def __init__(self):
+        self.cipher_type: str = "ROT13"
+
     def encode_decode(self, input_text: str) -> str:
         """Return encoded/decoded text"""
         output_text: str = ""
