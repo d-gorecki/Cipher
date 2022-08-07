@@ -39,12 +39,15 @@ class ROT13(Cipher):
 class ROT47(Cipher):
     """ROT47 class implementing ROT47 algorithm."""
 
+    def __init__(self):
+        self.cipher_type: str = " ROT47"
+
     def encode_decode(self, input_text: str):
         output_text: str = ""
         for char_ in input_text:
             if char_ in ROT47.ASCII_33_126:
                 output_text += ROT47.ASCII_33_126[
-                    (ROT47.ASCII_33_126.find(char_) + 47) % 93
+                    (ROT47.ASCII_33_126.find(char_) + 47) % 94
                 ]
             elif char_ == " ":
                 output_text += " "

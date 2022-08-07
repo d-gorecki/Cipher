@@ -1,5 +1,5 @@
 from functionality.filehandler import FileHandler
-from functionality.cipher import ROT13
+from functionality.cipher import ROT13, ROT47
 from functionality.ioreader import IOReader
 from typing import Union
 
@@ -36,7 +36,7 @@ class Manager:
     )
 
     def __init__(self):
-        self.cipher = {"ROT13": ROT13, "ROT47": "ROT47"}
+        self.cipher = {"ROT13": ROT13, "ROT47": ROT47}
         self.input = {"keyboard": IOReader, "file": FileHandler}
         self.output = {"screen": IOReader, "file": FileHandler}
         self.running = True
@@ -45,7 +45,7 @@ class Manager:
     def end_app(self):
         self.running = False
 
-    def cipher_factory(self, cipher_key: str) -> ROT13:
+    def cipher_factory(self, cipher_key: str) -> Union[ROT13, ROT47]:
         return self.cipher.get(cipher_key)()
 
     def input_factory(self, input_key: str) -> Union[IOReader, FileHandler]:
@@ -56,7 +56,7 @@ class Manager:
 
     def execute_case(self, cipher_: str, input_: str, output_: str):
         """Execute actions basing on passed arguments(case): cipher, input and output type"""
-        cipher_: ROT13 = self.cipher_factory(cipher_)
+        cipher_: Union[ROT13, ROT47] = self.cipher_factory(cipher_)
 
         if input_ == "file" and output_ == "file":
             print("# INPUT FILE")
@@ -123,5 +123,17 @@ class Manager:
             case (1, 2, 2):
                 print("Rot13 -> File -> File")
                 self.execute_case("ROT13", "file", "file")
+            case (2, 1, 1):
+                print("ROT47 -> Keyboard -> Screen")
+                self.execute_case("ROT47", "keyboard", "screen")
+            case (2, 1, 2):
+                print("ROT13 -> Keyboard -> File")
+                self.execute_case("ROT47", "keyboard", "file")
+            case (2, 2, 1):
+                print("Rot13 -> File -> Screen")
+                self.execute_case("ROT47", "file", "screen")
+            case (2, 2, 2):
+                print("Rot13 -> File -> File")
+                self.execute_case("ROT47", "file", "file")
             case _:
                 print("Something went wrong...")
