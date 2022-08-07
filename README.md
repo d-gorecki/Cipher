@@ -27,9 +27,14 @@
    * Cleancode itd.
 
 TODO 02.08.22:
-   * cipher.py -> 1. rename method encode 2. change prints to logger warning/print, 3. add staticmethod
+   * cipher.py ->  2. change prints to logger warning/print,
    * facade.py -> 1. refactor user_request_hanlder method while loop, so it has direct exit program?
    * 2. replace str menu with dict menu, write to file in form {ROT13: text}
       * filehandler.py -> method should create files dir for output files omodule os, os.getcwd(),
       * if not os.path.isdir(os.getcwd() + '/files'), os.mkdir
    * ioreader.py -> use logger warning/print instead of standard print
+
+
+DONE:
+1. rename method encode
+2. add staticmethod
