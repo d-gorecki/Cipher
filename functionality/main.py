@@ -19,7 +19,9 @@ def main():
                 manager.running = False
         except FileNotFoundError as e:
             logging.warning(e)
-            time.sleep(5)
+            continue
+        except ValueError as e:
+            logging.warning(e)
             continue
 
 

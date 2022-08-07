@@ -30,7 +30,7 @@ class ROT13(Cipher):
                 output_text += ROT13.UPPERCASE[(ROT13.UPPERCASE.find(char_) + 13) % 26]
             else:
                 raise ValueError(
-                    "ROT13 can encode only ASCII lower and uppercase letters."
+                    "ROT13 can encode only ASCII lower and uppercase letters.\nReturning to main menu..."
                 )
 
         return output_text
