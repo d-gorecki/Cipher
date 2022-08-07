@@ -41,6 +41,9 @@ class Manager:
         self.output = {"screen": IOReader, "file": FileHandler}
         self.running = True
 
+    def end_app(self):
+        self.running = False
+
     def cipher_factory(self, cipher_key: str) -> ROT13:
         return self.cipher.get(cipher_key)()
 
@@ -124,21 +127,3 @@ class Manager:
                 return True
             case _:
                 print("Something went wrong...")
-
-
-def main():
-    """Main function"""
-    manager = Manager()
-    running: bool = True
-
-    while running:
-        if manager.user_request_handler():
-            continue_ = input("Continue? [y/n]")
-            if continue_ == "n":
-                running = False
-        else:
-            running = False
-
-
-if __name__ == "__main__":
-    main()
