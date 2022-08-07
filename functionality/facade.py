@@ -112,7 +112,9 @@ class Manager:
                     continue
 
             except ValueError:
-                logging.info("Input must correspond to given options (1-3)!")
+                logging.info(
+                    "Input must corresponds to given options (1-3)!\nReturning to main menu..."
+                )
                 continue
 
             return main_menu_choice, input_menu_choice, output_menu_choice
