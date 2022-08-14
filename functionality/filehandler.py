@@ -21,7 +21,7 @@ class FileHandler:
 
     @staticmethod
     def create_output_files_dir():
-        file_path: str = getcwd() + "/files"
+        file_path: str = getcwd() + "/files/"
         if not path.isdir(file_path):
             mkdir(file_path)
 
@@ -31,9 +31,8 @@ class FileHandler:
         """Write passed data to file. Append data in case file does exist.
         Create new file in case passed file does not exist."""
         file_path: str = FileHandler.create_output_files_dir()
-        if not path.isdir(file_path):
-            mkdir(file_path)
-        with open(file_path + f"/{self.file_name}", "a") as f:
+
+        with open(file_path + f"{self.file_name}", "a") as f:
             # f.writelines(str({cipher_type: text}) + "\n")
             f.writelines(
                 str(
