@@ -1,5 +1,4 @@
-import os
-from os import getcwd, mkdir, path, fsync
+from os import getcwd, mkdir, path
 
 
 class FileHandler:
@@ -38,3 +37,4 @@ class FileHandler:
                 )
                 + "\n"
             )
+        print("File has been written.")
