@@ -38,3 +38,9 @@ TODO 02.08.22:
 DONE:
 1. rename method encode
 2. add staticmethod
+3. default file/ directory for output files added
+4. main loop changed (self.running property added
+
+
+NOT DONE:
+1. logger has some delay issues, can not be used in menu
