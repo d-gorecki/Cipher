@@ -4,7 +4,6 @@ from functionality.ioreader import IOReader
 from typing import Union
 from os.path import exists
 import logging
-import time
 
 logging.basicConfig(level=logging.INFO, format="")
 
@@ -66,7 +65,8 @@ class Manager:
         if input_ == "file" and output_ == "file":
             print("# INPUT FILE")
             input_: FileHandler = self.input_factory(input_)
-            if not exists(input_.file_path):
+            input_text: str = input_.read()
+            if not exists(input_.file_name):
                 raise FileNotFoundError(
                     "No such file or directory!\nReturning to main menu..."
                 )
@@ -74,9 +74,12 @@ class Manager:
             output_: FileHandler = self.output_factory(output_)
         else:
             input_: Union[IOReader, FileHandler] = self.input_factory(input_)
+            input_text: str = input_.read()
             output_: Union[IOReader, FileHandler] = self.output_factory(output_)
 
-        output_.write(cipher_.encode_decode(input_.read()), cipher_.cipher_type)
+        output_.write(
+            cipher_.encode_decode(input_text), input_text, cipher_.cipher_type
+        )
 
     def print_menu(self) -> Union[None, tuple]:
         """Prints user menu and returns given choice in form of tuple"""
