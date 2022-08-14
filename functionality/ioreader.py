@@ -7,6 +7,8 @@ class IOReader:
 
         return output
 
-    def write(self, text: str, cipher_type: str = None) -> None:
+    def write(
+        self, text: str, encdoded_text: str = None, cipher_type: str = None
+    ) -> None:
         """Print passed data to CLI"""
         print(text)
