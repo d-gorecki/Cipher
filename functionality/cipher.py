@@ -24,14 +24,21 @@ class ROT13(Cipher):
         """Return encoded/decoded text"""
         output_text: str = ""
         for char_ in input_text:
-            if char_ in ROT13.LOWERCASE:
-                output_text += ROT13.LOWERCASE[(ROT13.LOWERCASE.find(char_) + 13) % 26]
-            elif char_ in ROT13.UPPERCASE:
-                output_text += ROT13.UPPERCASE[(ROT13.UPPERCASE.find(char_) + 13) % 26]
+            if char_ == " ":
+                output_text += " "
             else:
-                raise ValueError(
-                    "ROT13 can encode only ASCII lower and uppercase letters."
-                )
+                if char_ in ROT13.LOWERCASE:
+                    output_text += ROT13.LOWERCASE[
+                        (ROT13.LOWERCASE.find(char_) + 13) % 26
+                    ]
+                elif char_ in ROT13.UPPERCASE:
+                    output_text += ROT13.UPPERCASE[
+                        (ROT13.UPPERCASE.find(char_) + 13) % 26
+                    ]
+                else:
+                    raise ValueError(
+                        "ROT13 can encode only ASCII lower and uppercase letters."
+                    )
 
         return output_text
 
