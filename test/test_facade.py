@@ -6,19 +6,19 @@ from functionality.facade import *
 
 
 @pytest.fixture
-def mock_file_path(mocker):
+def mock_file_path(mocker) -> None:
     mocker.patch(
         "functionality.filehandler.FileHandler.get_file_name", return_value="test"
     )
 
 
 @pytest.fixture
-def init_manager():
+def init_manager() -> Manager:
     return Manager()
 
 
 @pytest.fixture
-def mock_execute_case(mocker):
+def mock_execute_case(mocker) -> None:
     mocker.patch("functionality.facade.Manager.execute_case", return_value="")
 
 
