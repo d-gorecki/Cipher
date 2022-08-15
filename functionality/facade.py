@@ -137,22 +137,22 @@ class Manager:
                 print("ROT13 -> Keyboard -> File")
                 self.execute_case("ROT13", "keyboard", "file")
             case (1, 2, 1):
-                print("Rot13 -> File -> Screen")
+                print("ROT13 -> File -> Screen")
                 self.execute_case("ROT13", "file", "screen")
             case (1, 2, 2):
-                print("Rot13 -> File -> File")
+                print("ROT13 -> File -> File")
                 self.execute_case("ROT13", "file", "file")
             case (2, 1, 1):
                 print("ROT47 -> Keyboard -> Screen")
                 self.execute_case("ROT47", "keyboard", "screen")
             case (2, 1, 2):
-                print("ROT13 -> Keyboard -> File")
+                print("ROT47 -> Keyboard -> File")
                 self.execute_case("ROT47", "keyboard", "file")
             case (2, 2, 1):
-                print("Rot13 -> File -> Screen")
+                print("ROT47 -> File -> Screen")
                 self.execute_case("ROT47", "file", "screen")
             case (2, 2, 2):
-                print("Rot13 -> File -> File")
+                print("ROT47 -> File -> File")
                 self.execute_case("ROT47", "file", "file")
             case _:
                 print("Something went wrong...")
