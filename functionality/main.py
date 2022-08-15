@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO, format="")
 
 def main():
     """Main function"""
-    manager = Manager()
+    manager: Manager = Manager()
     while manager.running:
         try:
             manager.exit = manager.user_request_handler()

@@ -46,19 +46,22 @@ class Manager:
         self.running = True
         self.exit = False
 
-    def end_app(self):
+    def end_app(self) -> None:
         self.running = False
 
     def cipher_factory(self, cipher_key: str) -> Union[ROT13, ROT47]:
+        """Return cipher object(ROT13/ROT48) based on passed str"""
         return self.cipher.get(cipher_key)()
 
     def input_factory(self, input_key: str) -> Union[IOReader, FileHandler]:
+        """Return input object(IOReader/FileHandler) based on passed str"""
         return self.input.get(input_key)()
 
     def output_factory(self, output_key: str) -> Union[IOReader, FileHandler]:
+        """Return output object(IOReader/FileHandler) based on passed str"""
         return self.output.get(output_key)()
 
-    def execute_case(self, cipher_: str, input_: str, output_: str):
+    def execute_case(self, cipher_: str, input_: str, output_: str) -> None:
         """Execute actions basing on passed arguments(case): cipher, input and output type"""
         cipher_: Union[ROT13, ROT47] = self.cipher_factory(cipher_)
 
@@ -81,7 +84,7 @@ class Manager:
             cipher_.encode_decode(input_text), input_text, cipher_.cipher_type
         )
 
-    def print_menu(self) -> Union[None, tuple]:
+    def print_menu(self) -> Union[None, tuple, ValueError]:
         """Prints user menu and returns given choice in form of tuple"""
         print(Manager.app_name)
 
@@ -122,7 +125,7 @@ class Manager:
 
             return main_menu_choice, input_menu_choice, output_menu_choice
 
-    def user_request_handler(self):
+    def user_request_handler(self) -> [None, FileNotFoundError, ValueError]:
         """Perform action depending on user input"""
 
         main_menu_choice, input_menu_choice, output_menu_choice = self.print_menu()

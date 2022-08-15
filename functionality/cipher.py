@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import string
+from typing import Union
 
 
 class Cipher(ABC):
@@ -10,7 +11,7 @@ class Cipher(ABC):
     ASCII_33_126: str = "".join([chr(_) for _ in range(33, 127)])
 
     @abstractmethod
-    def encode_decode(self, input_text: str):
+    def encode_decode(self, input_text: str) -> NotImplementedError:
         raise NotImplementedError
 
 
@@ -20,7 +21,7 @@ class ROT13(Cipher):
     def __init__(self):
         self.cipher_type: str = "ROT13"
 
-    def encode_decode(self, input_text: str) -> str:
+    def encode_decode(self, input_text: str) -> Union[str, ValueError]:
         """Return encoded/decoded text"""
         output_text: str = ""
         for char_ in input_text:
@@ -49,7 +50,7 @@ class ROT47(Cipher):
     def __init__(self):
         self.cipher_type: str = " ROT47"
 
-    def encode_decode(self, input_text: str):
+    def encode_decode(self, input_text: str) -> Union[str, ValueError]:
         output_text: str = ""
         for char_ in input_text:
             if char_ in ROT47.ASCII_33_126:

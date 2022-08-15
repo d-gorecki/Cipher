@@ -20,7 +20,8 @@ class FileHandler:
         return output
 
     @staticmethod
-    def create_output_files_dir():
+    def create_output_files_dir() -> str:
+        """Check if /files dir already exist in current dir. If not create /files dir. Return dir path"""
         file_path: str = getcwd() + "/files/"
         if not path.isdir(file_path):
             mkdir(file_path)
