@@ -3,7 +3,7 @@
 # Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)
-* [Project patterns](#project-patterns)
+* [Patterns used](#patterns-used)
 * [Application view](#application-view)
 
 
@@ -22,4 +22,4 @@
 * Factory method
 
 ## Application view
-![Cipher-app-img](/home/dawid/Obrazy/Zrzuty ekranu/Cipher app.png)
+![Cipher-app-img](https://user-images.githubusercontent.com/106873834/184689583-86dde12a-dc5f-4db1-b9b0-477eaa70db9f.png)
