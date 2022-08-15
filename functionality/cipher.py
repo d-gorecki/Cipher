@@ -48,7 +48,7 @@ class ROT47(Cipher):
     """ROT47 class implementing ROT47 algorithm."""
 
     def __init__(self):
-        self.cipher_type: str = " ROT47"
+        self.cipher_type: str = "ROT47"
 
     def encode_decode(self, input_text: str) -> Union[str, ValueError]:
         output_text: str = ""
