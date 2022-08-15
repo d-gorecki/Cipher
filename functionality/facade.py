@@ -3,9 +3,8 @@ from functionality.cipher import ROT13, ROT47
 from functionality.ioreader import IOReader
 from typing import Union
 from os.path import exists
-import logging
 
-logging.basicConfig(level=logging.INFO, format="")
+# logging.basicConfig(level=logging.INFO, format="")
 
 
 class Manager:
@@ -118,7 +117,7 @@ class Manager:
                     continue
 
             except ValueError:
-                logging.info(
+                print(
                     "Input must corresponds to given options (1-3)!\nReturning to main menu..."
                 )
                 continue

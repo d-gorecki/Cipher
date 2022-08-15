@@ -1,8 +1,7 @@
 from functionality.facade import Manager
-import logging
-import time
 
-logging.basicConfig(level=logging.INFO, format="")
+
+# logging.basicConfig(level=logging.INFO, format="")
 
 
 def main():
@@ -15,16 +14,11 @@ def main():
                 break
             continue_: str = input("Continue?(y/n):\n>>> ")
             if continue_ == "n":
-                logging.info("Closing app...")
+                print("Closing app...")
                 manager.running = False
-        except FileNotFoundError:
-            logging.warning("File not found\nReturning to main menu...")
+        except (FileNotFoundError, ValueError, IsADirectoryError) as e:
+            print(e, "\nReturning to main menu...")
             continue
-        except ValueError:
-            logging.warning("Wrong value\nReturning to main menu...")
-            continue
-        except IsADirectoryError:
-            logging.warning("Passed file name is directory\nReturning to main menu...")
 
 
 if __name__ == "__main__":
