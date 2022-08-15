@@ -17,12 +17,14 @@ def main():
             if continue_ == "n":
                 logging.info("Closing app...")
                 manager.running = False
-        except FileNotFoundError as e:
-            logging.warning(e)
+        except FileNotFoundError:
+            logging.warning("File not found\nReturning to main menu...")
             continue
-        except ValueError as e:
-            logging.warning(e)
+        except ValueError:
+            logging.warning("Wrong value\nReturning to main menu...")
             continue
+        except IsADirectoryError:
+            logging.warning("Passed file name is directory\nReturning to main menu...")
 
 
 if __name__ == "__main__":
