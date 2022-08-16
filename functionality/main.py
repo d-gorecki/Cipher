@@ -17,7 +17,7 @@ def main():
                 print("Closing app...")
                 manager.running = False
         except (FileNotFoundError, ValueError, IsADirectoryError) as e:
-            print(e, "\nReturning to main menu...")
+            print(e)
             continue
 
 
