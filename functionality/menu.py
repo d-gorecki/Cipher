@@ -8,7 +8,7 @@ class Menu(Enum):
 
     MAIN_MENU: str = cleandoc(
         """
-        Please select encoding method:
+        Please select method:
         1. ROT13
         2. ROT47
         3. Exit program

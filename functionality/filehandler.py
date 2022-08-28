@@ -6,18 +6,14 @@ class FileHandler:
     """File handler class"""
 
     def __init__(self, path_: str = None):
-        if path:
-            self.file_name: str = path_
-        else:
-            self.file_name: str = ""
-            self.get_file_name()
+        self.file_name: str = ""
+        self.get_file_name()
 
     def get_file_name(self) -> None:
         """Get file name(path) from user"""
         self.file_name: str = input("Please enter file name: ")
 
     def read(self) -> str:
-
         """Read data from file and return it in form of str"""
         with open(self.file_name, mode="r") as f:
             output: str = "".join(f.readlines())
@@ -50,4 +46,8 @@ class FileHandler:
             )
             f.write("\n")
 
-        print("File has been written.")
+    def dump_buffer(self, buffer: list[dict]):
+        """Write passed data into file in json format. Used for unsaved buffer"""
+        file_path: str = FileHandler.create_output_files_dir()
+        with open(file_path + f"{self.file_name}.json", "w") as f:
+            dump(buffer, f, indent=4)

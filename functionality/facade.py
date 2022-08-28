@@ -4,10 +4,8 @@ from functionality.ioreader import IOReader
 from typing import Union
 from os.path import exists
 from .menu import Menu
-from typing import Any
 
 
-# TODO Buffer -> Usuwanie go po zapisaniu, zapisywanie buffer do jsona,
 class Manager:
     """Manager class implementing facade structural pattern"""
 
@@ -21,7 +19,7 @@ class Manager:
         self.output = {"screen": IOReader, "file": FileHandler}
         self.running = True
         self.exit = False
-        self.buffer: list[list[Any]] = []
+        self.buffer: list[dict] = []
 
     def end_app(self) -> None:
         self.running = False
@@ -40,6 +38,7 @@ class Manager:
 
     def execute_case(self, cipher_: str, input_: str, output_: str) -> None:
         """Execute actions basing on passed arguments(case): cipher, input and output type"""
+        buffer_output: str = output_
         cipher_: Union[ROT13, ROT47] = self.cipher_factory(cipher_)
 
         if input_ == "file" and output_ == "file":
@@ -60,8 +59,14 @@ class Manager:
         encoded_decoded_text: str = cipher_.encode_decode(input_text)
         output_.write(encoded_decoded_text, input_text, cipher_.cipher_type)
 
-        if output_ != "file":
-            self.buffer.append([encoded_decoded_text, input_text, cipher_.cipher_type])
+        if buffer_output != "file":
+            self.buffer.append(
+                {
+                    "Cipher type": cipher_.cipher_type,
+                    "input text": input_text,
+                    "encoded/decoded text": encoded_decoded_text,
+                }
+            )
 
     def print_menu(self) -> Union[None, tuple, ValueError]:
         """Prints user menu and returns given choice in form of tuple"""
@@ -153,9 +158,9 @@ class Manager:
                             f"Do you want to save them to file? (y/n): "
                         )
                         if dump_unsaved == "y":
-                            dump_file_handler = FileHandler("app_buffer")
-                            for item in self.buffer:
-                                dump_file_handler.write(item[0], item[1], item[2])
+                            unsaved_file = FileHandler()
+                            unsaved_file.dump_buffer(self.buffer)
+                            print("File has been written!")
                     print("Closing app...")
                     self.running = False
             except (FileNotFoundError, ValueError, IsADirectoryError) as e:
