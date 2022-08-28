@@ -32,6 +32,7 @@ class FileHandler:
         """Write passed data to file. Append data in case file does exist.
         Create new file in case passed file does not exist."""
         file_path: str = FileHandler.create_output_files_dir()
+        # TODO Change normal file to .json
 
         with open(file_path + f"{self.file_name}", "a") as f:
             # f.writelines(str({cipher_type: text}) + "\n")

@@ -9,6 +9,7 @@ def main():
     manager: Manager = Manager()
     while manager.running:
         try:
+            # TODO Spróļować wydzielić tą logikę do funkcji
             manager.exit = manager.user_request_handler()
             if manager.exit:
                 break
@@ -16,6 +17,7 @@ def main():
             if continue_ == "n":
                 print("Closing app...")
                 manager.running = False
+        # TODO Przeniesć FileNotFound Error i IsADirecotryError do FileHandler
         except (FileNotFoundError, ValueError, IsADirectoryError) as e:
             print(e)
             continue

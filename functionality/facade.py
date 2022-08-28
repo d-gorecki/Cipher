@@ -3,40 +3,17 @@ from functionality.cipher import ROT13, ROT47
 from functionality.ioreader import IOReader
 from typing import Union
 from os.path import exists
+from .menu import Menu
 
 # logging.basicConfig(level=logging.INFO, format="")
 
-
+# TODO Buffer -> Usuwanie go po zapisaniu, zapisywanie buffer do jsona,
 class Manager:
     """Manager class implementing facade structural pattern"""
 
     MENU_PROMPT: str = "Entered value must be in range 1-3"
 
     app_name: str = "Cipher app."
-
-    main_menu: str = (
-        "Please select encoding method:\n"
-        "1. ROT13\n"
-        "2. ROT47\n"
-        "3. Exit program\n"
-        ">>> "
-    )
-
-    input_menu: str = (
-        "Please select input method:\n"
-        "1. Keyboard\n"
-        "2. File\n"
-        "3. Return to main menu\n"
-        ">>> "
-    )
-
-    output_menu: str = (
-        "Please select output target:\n"
-        "1. Screen\n"
-        "2. File\n"
-        "3. Return to main menu\n"
-        ">>> "
-    )
 
     def __init__(self):
         self.cipher = {"ROT13": ROT13, "ROT47": ROT47}
@@ -64,7 +41,7 @@ class Manager:
         """Execute actions basing on passed arguments(case): cipher, input and output type"""
         cipher_: Union[ROT13, ROT47] = self.cipher_factory(cipher_)
 
-        if input_ == "file" and output_ == "file":
+        if (input_ and output_) == "file":
             print("# INPUT FILE")
             input_: FileHandler = self.input_factory(input_)
             input_text: str = input_.read()
@@ -89,29 +66,29 @@ class Manager:
 
         while True:
             try:
-                main_menu_choice: int = int(input(Manager.main_menu))
+                main_menu_choice: int = int(input(Menu.MAIN_MENU))
 
                 while main_menu_choice not in [1, 2, 3]:
                     print(Manager.MENU_PROMPT)
-                    main_menu_choice = int(input(Manager.main_menu))
+                    main_menu_choice = int(input(Menu.MAIN_MENU))
 
                 if main_menu_choice == 3:
                     print("Closing app...")
                     self.running = False
                     return -1, -1, -1
 
-                input_menu_choice: int = int(input(Manager.input_menu))
+                input_menu_choice: int = int(input(Menu.INPUT_MENU))
                 while input_menu_choice not in [1, 2, 3]:
                     print(Manager.MENU_PROMPT)
-                    input_menu_choice = int(input(Manager.input_menu))
+                    input_menu_choice = int(input(Menu.INPUT_MENU))
 
                 if input_menu_choice == 3:
                     continue
 
-                output_menu_choice: int = int(input(Manager.output_menu))
+                output_menu_choice: int = int(input(Menu.OUTPUT_MENU))
                 while output_menu_choice not in [1, 2, 3]:
                     print(Manager.MENU_PROMPT)
-                    output_menu_choice = int(input(Manager.input_menu))
+                    output_menu_choice = int(input(Menu.OUTPUT_MENU))
 
                 if output_menu_choice == 3:
                     continue
