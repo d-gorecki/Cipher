@@ -4,9 +4,8 @@ from functionality.ioreader import IOReader
 from typing import Union
 from os.path import exists
 from .menu import Menu
-from functionality.buffer import Buffer
+from typing import Any
 
-# logging.basicConfig(level=logging.INFO, format="")
 
 # TODO Buffer -> Usuwanie go po zapisaniu, zapisywanie buffer do jsona,
 class Manager:
@@ -22,6 +21,7 @@ class Manager:
         self.output = {"screen": IOReader, "file": FileHandler}
         self.running = True
         self.exit = False
+        self.buffer: list[list[Any]] = []
 
     def end_app(self) -> None:
         self.running = False
@@ -57,9 +57,11 @@ class Manager:
             input_text: str = input_.read()
             output_: Union[IOReader, FileHandler] = self.output_factory(output_)
 
-        output_.write(
-            cipher_.encode_decode(input_text), input_text, cipher_.cipher_type
-        )
+        encoded_decoded_text: str = cipher_.encode_decode(input_text)
+        output_.write(encoded_decoded_text, input_text, cipher_.cipher_type)
+
+        if output_ != "file":
+            self.buffer.append([encoded_decoded_text, input_text, cipher_.cipher_type])
 
     def print_menu(self) -> Union[None, tuple, ValueError]:
         """Prints user menu and returns given choice in form of tuple"""
@@ -138,18 +140,24 @@ class Manager:
                 print("Something went wrong...")
 
     def run_app(self):
-        # manager: Manager = Manager()
         while self.running:
             try:
-                # TODO Spróļować wydzielić tą logikę do funkcji
                 self.exit = self.user_request_handler()
                 if self.exit:
                     break
                 continue_: str = input("Continue?(y/n):\n>>> ")
                 if continue_ == "n":
+                    if self.buffer:
+                        dump_unsaved: str = input(
+                            f"You have {len(self.buffer)} unsaved results. "
+                            f"Do you want to save them to file? (y/n): "
+                        )
+                        if dump_unsaved == "y":
+                            dump_file_handler = FileHandler("app_buffer")
+                            for item in self.buffer:
+                                dump_file_handler.write(item[0], item[1], item[2])
                     print("Closing app...")
                     self.running = False
-            # TODO Przeniesć FileNotFound Error i IsADirecotryError do FileHandler
             except (FileNotFoundError, ValueError, IsADirectoryError) as e:
-                print(e)
+                print(str(e), "Returning to main menu...", sep="\n")
                 continue
