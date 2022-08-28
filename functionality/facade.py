@@ -4,6 +4,7 @@ from functionality.ioreader import IOReader
 from typing import Union
 from os.path import exists
 from .menu import Menu
+from functionality.buffer import Buffer
 
 # logging.basicConfig(level=logging.INFO, format="")
 
@@ -41,7 +42,7 @@ class Manager:
         """Execute actions basing on passed arguments(case): cipher, input and output type"""
         cipher_: Union[ROT13, ROT47] = self.cipher_factory(cipher_)
 
-        if (input_ and output_) == "file":
+        if input_ == "file" and output_ == "file":
             print("# INPUT FILE")
             input_: FileHandler = self.input_factory(input_)
             input_text: str = input_.read()
@@ -135,3 +136,20 @@ class Manager:
                 self.execute_case("ROT47", "file", "file")
             case _:
                 print("Something went wrong...")
+
+    def run_app(self):
+        # manager: Manager = Manager()
+        while self.running:
+            try:
+                # TODO Spróļować wydzielić tą logikę do funkcji
+                self.exit = self.user_request_handler()
+                if self.exit:
+                    break
+                continue_: str = input("Continue?(y/n):\n>>> ")
+                if continue_ == "n":
+                    print("Closing app...")
+                    self.running = False
+            # TODO Przeniesć FileNotFound Error i IsADirecotryError do FileHandler
+            except (FileNotFoundError, ValueError, IsADirectoryError) as e:
+                print(e)
+                continue
