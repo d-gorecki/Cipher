@@ -1,10 +1,11 @@
 from os import getcwd, mkdir, path
+from json import dump
 
 
 class FileHandler:
     """File handler class"""
 
-    def __init__(self):
+    def __init__(self, path_: str = None):
         self.file_name: str = ""
         self.get_file_name()
 
@@ -33,16 +34,20 @@ class FileHandler:
         Create new file in case passed file does not exist."""
         file_path: str = FileHandler.create_output_files_dir()
 
-        with open(file_path + f"{self.file_name}", "a") as f:
-            # f.writelines(str({cipher_type: text}) + "\n")
-            f.writelines(
-                str(
-                    {
-                        "Cipher type": cipher_type,
-                        "Encoded text:": encoded_text,
-                        "Decoded text:": decoded_text,
-                    }
-                )
-                + "\n"
+        with open(file_path + f"{self.file_name}.json", "a") as f:
+            dump(
+                {
+                    "Cipher type": cipher_type,
+                    "input text": encoded_text,
+                    "encoded/decoded text": decoded_text,
+                },
+                f,
+                indent=4,
             )
-        print("File has been written.")
+            f.write("\n")
+
+    def dump_buffer(self, buffer: list[dict]):
+        """Write passed data into file in json format. Used for unsaved buffer"""
+        file_path: str = FileHandler.create_output_files_dir()
+        with open(file_path + f"{self.file_name}.json", "w") as f:
+            dump(buffer, f, indent=4)

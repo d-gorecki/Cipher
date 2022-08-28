@@ -3,7 +3,8 @@
 # Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)
-* [Patterns used](#patterns-used)
+* [Tools](#Tools)
+* [Design Patterns used](#design-patterns-used)
 * [Application view](#application-view)
 
 
@@ -17,7 +18,11 @@
 * Pytest
 
 
-## Patterns used
+## Tools
+* precommit
+
+
+## Design patterns used
 * Facade
 * Factory method
 

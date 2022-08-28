@@ -9,8 +9,8 @@ def return_rot13_object() -> ROT13:
 
 
 @pytest.fixture
-def return_rot47_obj() -> ROT13:
-    return ROT47
+def return_rot47_object() -> ROT47:
+    return ROT47()
 
 
 @pytest.mark.ROT13

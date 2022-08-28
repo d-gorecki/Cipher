@@ -3,8 +3,7 @@ from functionality.cipher import ROT13, ROT47
 from functionality.ioreader import IOReader
 from typing import Union
 from os.path import exists
-
-# logging.basicConfig(level=logging.INFO, format="")
+from .menu import Menu
 
 
 class Manager:
@@ -14,36 +13,13 @@ class Manager:
 
     app_name: str = "Cipher app."
 
-    main_menu: str = (
-        "Please select encoding method:\n"
-        "1. ROT13\n"
-        "2. ROT47\n"
-        "3. Exit program\n"
-        ">>> "
-    )
-
-    input_menu: str = (
-        "Please select input method:\n"
-        "1. Keyboard\n"
-        "2. File\n"
-        "3. Return to main menu\n"
-        ">>> "
-    )
-
-    output_menu: str = (
-        "Please select output target:\n"
-        "1. Screen\n"
-        "2. File\n"
-        "3. Return to main menu\n"
-        ">>> "
-    )
-
     def __init__(self):
         self.cipher = {"ROT13": ROT13, "ROT47": ROT47}
         self.input = {"keyboard": IOReader, "file": FileHandler}
         self.output = {"screen": IOReader, "file": FileHandler}
         self.running = True
         self.exit = False
+        self.buffer: list[dict] = []
 
     def end_app(self) -> None:
         self.running = False
@@ -62,6 +38,7 @@ class Manager:
 
     def execute_case(self, cipher_: str, input_: str, output_: str) -> None:
         """Execute actions basing on passed arguments(case): cipher, input and output type"""
+        buffer_output: str = output_
         cipher_: Union[ROT13, ROT47] = self.cipher_factory(cipher_)
 
         if input_ == "file" and output_ == "file":
@@ -79,9 +56,17 @@ class Manager:
             input_text: str = input_.read()
             output_: Union[IOReader, FileHandler] = self.output_factory(output_)
 
-        output_.write(
-            cipher_.encode_decode(input_text), input_text, cipher_.cipher_type
-        )
+        encoded_decoded_text: str = cipher_.encode_decode(input_text)
+        output_.write(encoded_decoded_text, input_text, cipher_.cipher_type)
+
+        if buffer_output != "file":
+            self.buffer.append(
+                {
+                    "Cipher type": cipher_.cipher_type,
+                    "input text": input_text,
+                    "encoded/decoded text": encoded_decoded_text,
+                }
+            )
 
     def print_menu(self) -> Union[None, tuple, ValueError]:
         """Prints user menu and returns given choice in form of tuple"""
@@ -89,29 +74,29 @@ class Manager:
 
         while True:
             try:
-                main_menu_choice: int = int(input(Manager.main_menu))
+                main_menu_choice: int = int(input(Menu.MAIN_MENU))
 
                 while main_menu_choice not in [1, 2, 3]:
                     print(Manager.MENU_PROMPT)
-                    main_menu_choice = int(input(Manager.main_menu))
+                    main_menu_choice = int(input(Menu.MAIN_MENU))
 
                 if main_menu_choice == 3:
                     print("Closing app...")
                     self.running = False
                     return -1, -1, -1
 
-                input_menu_choice: int = int(input(Manager.input_menu))
+                input_menu_choice: int = int(input(Menu.INPUT_MENU))
                 while input_menu_choice not in [1, 2, 3]:
                     print(Manager.MENU_PROMPT)
-                    input_menu_choice = int(input(Manager.input_menu))
+                    input_menu_choice = int(input(Menu.INPUT_MENU))
 
                 if input_menu_choice == 3:
                     continue
 
-                output_menu_choice: int = int(input(Manager.output_menu))
+                output_menu_choice: int = int(input(Menu.OUTPUT_MENU))
                 while output_menu_choice not in [1, 2, 3]:
                     print(Manager.MENU_PROMPT)
-                    output_menu_choice = int(input(Manager.input_menu))
+                    output_menu_choice = int(input(Menu.OUTPUT_MENU))
 
                 if output_menu_choice == 3:
                     continue
@@ -158,3 +143,26 @@ class Manager:
                 self.execute_case("ROT47", "file", "file")
             case _:
                 print("Something went wrong...")
+
+    def run_app(self):
+        while self.running:
+            try:
+                self.exit = self.user_request_handler()
+                if self.exit:
+                    break
+                continue_: str = input("Continue?(y/n):\n>>> ")
+                if continue_ == "n":
+                    if self.buffer:
+                        dump_unsaved: str = input(
+                            f"You have {len(self.buffer)} unsaved results. "
+                            f"Do you want to save them to file? (y/n): "
+                        )
+                        if dump_unsaved == "y":
+                            unsaved_file = FileHandler()
+                            unsaved_file.dump_buffer(self.buffer)
+                            print("File has been written!")
+                    print("Closing app...")
+                    self.running = False
+            except (FileNotFoundError, ValueError, IsADirectoryError) as e:
+                print(str(e), "Returning to main menu...", sep="\n")
+                continue
