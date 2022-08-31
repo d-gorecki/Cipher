@@ -38,7 +38,7 @@ class ROT13(Cipher):
                     ]
                 else:
                     raise ValueError(
-                        "ROT13 can encode only ASCII lower and uppercase letters.\nReturning to main menu..."
+                        "ROT13 can encode only ASCII lower and uppercase letters."
                     )
 
         return output_text
