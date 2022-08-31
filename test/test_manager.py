@@ -2,7 +2,7 @@ import io
 import sys
 
 import pytest
-from functionality.facade import *
+from functionality.manager import *
 
 
 @pytest.fixture
@@ -19,7 +19,7 @@ def init_manager() -> Manager:
 
 @pytest.fixture
 def mock_execute_case(mocker) -> None:
-    mocker.patch("functionality.facade.Manager.execute_case", return_value="")
+    mocker.patch("functionality.manager.Manager.execute_case", return_value="")
 
 
 @pytest.mark.factory
@@ -75,7 +75,7 @@ def test_user_request_handler_should_execute_proper_case_for_given_inputs(
     mocker, capsys, input_, expected, init_manager, mock_execute_case
 ):
 
-    mocker.patch("functionality.facade.Manager.print_menu", return_value=input_)
+    mocker.patch("functionality.manager.Manager.print_menu", return_value=input_)
     init_manager.user_request_handler()
     captured = capsys.readouterr()
 
