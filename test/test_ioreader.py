@@ -6,4 +6,4 @@ def test_ioreader_write(capsys):
     IOReader().write(expected)
     captured = capsys.readouterr()
 
-    assert captured.out == expected + "\n"
+    assert captured.out == "<<<Results>>>: " + expected + "\n"
