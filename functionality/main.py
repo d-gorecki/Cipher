@@ -1,4 +1,4 @@
-from functionality.facade import Manager
+from functionality.manager import Manager
 
 
 def main():

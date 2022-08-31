@@ -21,9 +21,6 @@ class Manager:
         self.exit = False
         self.buffer: list[dict] = []
 
-    def end_app(self) -> None:
-        self.running = False
-
     def cipher_factory(self, cipher_key: str) -> Union[ROT13, ROT47]:
         """Return cipher object(ROT13/ROT48) based on passed str"""
         return self.cipher.get(cipher_key)()
@@ -45,6 +42,7 @@ class Manager:
             print("# INPUT FILE")
             input_: FileHandler = self.input_factory(input_)
             input_text: str = input_.read()
+            encoded_decoded_text: str = cipher_.encode_decode(input_text)
             if not exists(input_.file_name):
                 raise FileNotFoundError(
                     "No such file or directory!\nReturning to main menu..."
@@ -54,10 +52,14 @@ class Manager:
         else:
             input_: Union[IOReader, FileHandler] = self.input_factory(input_)
             input_text: str = input_.read()
+            encoded_decoded_text: str = cipher_.encode_decode(input_text)
             output_: Union[IOReader, FileHandler] = self.output_factory(output_)
 
-        encoded_decoded_text: str = cipher_.encode_decode(input_text)
-        output_.write(encoded_decoded_text, input_text, cipher_.cipher_type)
+        if isinstance(output_, FileHandler):
+            output_.write(encoded_decoded_text, input_text, cipher_.cipher_type)
+            print("File has been written!")
+        else:
+            output_.write(encoded_decoded_text)
 
         if buffer_output != "file":
             self.buffer.append(

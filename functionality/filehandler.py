@@ -1,11 +1,11 @@
 from os import getcwd, mkdir, path
-from json import dump
+import json
 
 
 class FileHandler:
     """File handler class"""
 
-    def __init__(self, path_: str = None):
+    def __init__(self):
         self.file_name: str = ""
         self.get_file_name()
 
@@ -35,7 +35,7 @@ class FileHandler:
         file_path: str = FileHandler.create_output_files_dir()
 
         with open(file_path + f"{self.file_name}.json", "a") as f:
-            dump(
+            json.dump(
                 {
                     "Cipher type": cipher_type,
                     "input text": encoded_text,
@@ -50,4 +50,4 @@ class FileHandler:
         """Write passed data into file in json format. Used for unsaved buffer"""
         file_path: str = FileHandler.create_output_files_dir()
         with open(file_path + f"{self.file_name}.json", "w") as f:
-            dump(buffer, f, indent=4)
+            json.dump(buffer, f, indent=4)
